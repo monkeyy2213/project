@@ -2,6 +2,7 @@ from .models import *
 
 menu = [{'title': "О сайте", 'url_name': 'about'},
         {'title': "Обратная связь", 'url_name': 'contact'},
+        {'title': "Услуги", 'url_name': 'service'},
         # {'title': "Добавить животное", 'url_name': 'add_animals'},
         # {'title': "Профиль", 'url_name': 'profile'},
 ]

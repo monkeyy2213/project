@@ -1,6 +1,16 @@
 {% extends 'animals/base.html' %}
 
 {% block content %}
-<h1>{{title}}</h1>
-<p>G
+<ul>
+	{% for anamnes in anamnesis %}
+	<li>
+		<p>Запись {{anamnes.id}}</p>
+        <p>Жалобы: {{anamnes.complaints}}</p>
+		<p>Диагноз: {{anamnes.diagnosis}} </p>
+        <p>Предписание: {{anamnes.prescriptions}} </p>
+	</li>
+			<div class="clear"></div>
+	{% endfor %}
+</ul>
+
 {% endblock %}

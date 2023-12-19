@@ -1,0 +1,14 @@
+{% extends 'animals/base.html' %}
+
+{% block content %}
+<ul>
+	{% for service in services %}
+	<li>
+		<h2>{{service.name}}</h2>
+		<p>{{service.price}} рублей</p>
+	</li>
+			<div class="clear"></div>
+	{% endfor %}
+</ul>
+
+{% endblock %}

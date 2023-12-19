@@ -45,9 +45,6 @@ class Visit(models.Model):
    visit_date = models.DateField(verbose_name="Дата посещения")  
    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name="id пациента")
    veterinarian = models.ForeignKey(Veterinarian, on_delete=models.CASCADE, verbose_name="Принимающий врач")  
-   complaints = models.TextField(verbose_name="Жалобы")
-   diagnosis = models.TextField(verbose_name="Диагноз")
-   prescriptions = models.TextField(verbose_name="Предписания")
 
    def __str__(self):
        return self.visit_date
@@ -68,7 +65,7 @@ class Service(models.Model):
         verbose_name_plural = 'Услуги'
    
 class ProvidedService(models.Model):
-   visit = models.ForeignKey(Visit, on_delete=models.CASCADE, verbose_name="Дата посещения")
+   visit = models.ForeignKey(Visit, on_delete=models.CASCADE, verbose_name="Номер посещения")
    service = models.ForeignKey(Service, on_delete=models.CASCADE, verbose_name="Услуга")
    date = models.DateField(default='2023-01-01', verbose_name="Дата оказания услуги")
 
@@ -78,3 +75,17 @@ class ProvidedService(models.Model):
    class Meta:
         verbose_name = 'Оказанные услуги'
         verbose_name_plural = 'Оказанные услуги'
+
+class Anamnesis(models.Model):
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, verbose_name="id пациента")
+    visit = models.ForeignKey(Visit, on_delete=models.CASCADE, verbose_name="Номер посещения")
+    complaints = models.TextField(verbose_name="Жалобы")
+    diagnosis = models.TextField(verbose_name="Диагноз")
+    prescriptions = models.TextField(verbose_name="Предписания")
+
+    def __str__(self):
+       return self.title
+   
+    class Meta:
+        verbose_name = 'Мед. книжка'
+        verbose_name_plural = 'Мед. книжка'

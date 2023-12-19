@@ -73,8 +73,28 @@ def logout_user(request):
     logout(request)
     return redirect('home')
 
-def profile(request):
-    return render(request, 'animals/profile.html', {'menu': menu, 'title': 'Профиль'})
+class Service(DataMixin, ListView):
+    model = Service
+    template_name = 'animals/service.html' 
+    context_object_name = 'services'
+    
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Услуги")
+        return dict(list(context.items()) + list(c_def.items()))
+
+class Profile(DataMixin, ListView):
+    model = Anamnesis
+    template_name = 'animals/profile.html' 
+    context_object_name = 'anamnesis'
+    
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Профиль")
+        return dict(list(context.items()) + list(c_def.items()))
+
+
+
 
 # def addanimals(request):
 #     if request.method == 'POST':
