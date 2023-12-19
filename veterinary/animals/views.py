@@ -26,7 +26,7 @@ class AnimalHome(DataMixin, ListView):
 
 def about(request):
     return render(request, 'animals/about.html', {'menu': menu, 'title': 'О сайте'})
-
+        
 class AddAnimals(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddAnimalForm
     template_name = 'animals/add_animals.html'
@@ -73,8 +73,8 @@ def logout_user(request):
     logout(request)
     return redirect('home')
 
-# def profile(request):
-#     return render(request, 'animals/profile.html', {'menu': menu, 'title': 'Профиль'})
+def profile(request):
+    return render(request, 'animals/profile.html', {'menu': menu, 'title': 'Профиль'})
 
 # def addanimals(request):
 #     if request.method == 'POST':
