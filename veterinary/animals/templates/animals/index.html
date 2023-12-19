@@ -1,0 +1,16 @@
+{% extends 'animals/base.html' %}
+
+{% block content %}
+<ul>
+	{% for patient in patients %}
+	<li>
+		<h2>{{patient.name}}</h2>
+		{% if patient.photo %}
+			<p><img class="img-article-left thumb" src="{{patient.photo.url}}"></p>
+		{% endif %}
+	</li>
+			<div class="clear"></div>
+	{% endfor %}
+</ul>
+
+{% endblock %}
