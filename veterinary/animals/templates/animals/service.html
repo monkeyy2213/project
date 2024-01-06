@@ -1,0 +1,30 @@
+{% extends 'animals/base.html' %}
+
+{% block content %}
+<ul>
+	{% if request.user.is_authenticated %} 
+
+	<h1>{{title}}</h1>
+
+	<form method="post">
+    {% csrf_token %}
+	{% for f in form %}
+		<p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
+		<div class="form-error">{{ f.errors }}</div>
+	{% endfor %} 
+
+    <button type="submit">Записаться</button> 
+	</form>
+	{% else %}
+	{% for service in services %}
+	<li>
+		<h2>{{service.name}}</h2>
+		<p>{{service.price}} рублей</p>
+	</li>
+			<div class="clear"></div>
+	{% endfor %}
+	{% endif %}
+</ul>
+
+{% endblock %}
+

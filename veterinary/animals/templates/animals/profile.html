@@ -1,0 +1,25 @@
+{% extends 'animals/base.html' %}
+
+{% block content %}
+<ul>
+	<script> var i = 0; </script>
+	{% for anamnes in anamnesis %}
+		{% if user.id == anamnes.id %} 
+		<li>
+			<script> i = i + 1; </script>
+			<p data-name="i"> Запись </p>
+			{% for p in patient %}
+				{% if p.id == anamnes.patient_id %} 
+					<p>Пациент: {{p.name}}</p>
+				{% endif %}
+			{% endfor %}
+        	<p>Жалобы: {{anamnes.complaints}}</p>
+			<p>Диагноз: {{anamnes.diagnosis}} </p>
+        	<p>Предписание: {{anamnes.prescriptions}} </p>
+		</li>
+		{% endif %}
+			<div class="clear"></div>
+	{% endfor %}
+</ul>
+
+{% endblock %}
