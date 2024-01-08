@@ -2,14 +2,15 @@ from typing import Any
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
-from django.core.paginator import Paginator
+from django.db import InternalError
 from django.db.models.query import QuerySet
-from django.http import HttpResponse, HttpResponseNotFound, Http404
+from django.http import HttpRequest, HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 import psycopg2
+import datetime 
 from .forms import *
 from .models import *
 from .utils import *
@@ -53,7 +54,8 @@ class RegisterUser(DataMixin, CreateView):
     
     def form_valid(self, form):
         user = form.save()
-
+        login(self.request, user)
+        return redirect('home')
 #         conn = psycopg2.connect("dbname='app2' user='postgres' host='127.0.0.1' password='froster-1'")
 #         cur = conn.cursor()
 #         cur.execute("INSERT INTO animals_owner (first_name, last_name, email, password_ow, username) VALUES (%s, %s, %s, %s, %s)",
@@ -61,9 +63,6 @@ class RegisterUser(DataMixin, CreateView):
 #         conn.commit()
 #         cur.close()
 #         conn.close()
-
-        login(self.request, user)
-        return redirect('home')
     
 class LoginUser(DataMixin, LoginView):
     form_class = LoginUserForm
@@ -75,24 +74,26 @@ class LoginUser(DataMixin, LoginView):
         login = c_def.items()
         return dict(list(context.items()) + list(c_def.items()))
 
-
     def get_success_url(self):
         return reverse_lazy('home')
-
-
+    
 def logout_user(request):
     logout(request)
     return redirect('home')
 
-class Service(DataMixin, ListView):
-    model = Service
+class Service(LoginRequiredMixin, DataMixin, CreateView):
+    form_class = VisitForm
     template_name = 'animals/service.html' 
-    context_object_name = 'services'
+    #context_object_name = 'services'
+    success_url = reverse_lazy('home')
+    login_url = reverse_lazy('home')
     
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title="Услуги")
         return dict(list(context.items()) + list(c_def.items()))
+    
+
 
 class Profile(DataMixin, ListView):
     model = Anamnesis
@@ -102,10 +103,23 @@ class Profile(DataMixin, ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['patient'] = Patient.objects.all()
-        context['note'] = ['1','2','3','4','5','6','7','8','9','10']
         c_def = self.get_user_context(title="Профиль")
         return dict(list(context.items()) + list(c_def.items()))
 
+# def form_view(request: HttpRequest) -> HttpResponse: 
+#     if VisitForm.method == "POST": 
+#         form = VisitForm(request.POST) 
+#         if form.is_valid(): 
+#             # Receive the submitted date as an instance of `datetime.date`. 
+#             date: datetime.date = form.cleaned_data["date_of_birth"] 
+#             # Do something with that value, such as storing it in a database 
+#             # or displaying it to the user. 
+#             date_output = date.strftime("%d %b %Y") 
+#             return HttpResponse(f"The submitted date is: {date_output}") 
+#     else: 
+#         form = VisitForm() 
+#     ctx = {"form": form} 
+#     return render(request, "animals/form.html", ctx) 
 
 
 
